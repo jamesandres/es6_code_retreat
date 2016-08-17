@@ -17,38 +17,6 @@ function initCanvas() {
     return canvas
 }
 
-function initCells(w, h) {
-    let newCells = [];
-
-    for (let x = 0; x < w; x++) {
-        newCells[x] = [];
-        for (let y = 0; y < h; y++) {
-            newCells[x][y] = 0;
-        }
-    }
-
-    return newCells;
-}
-
-function countNeighbours(cells, x, y) {
-    let count = 0;
-
-    for (let dx=-1; dx <= 1; dx++) {
-        for (let dy=-1; dy <= 1; dy++) {
-            let i = (x + dx + cells.length) % cells.length,
-                j = (y + dy + cells[0].length) % cells[0].length;
-
-            if (i === x && j === y) {
-                continue;
-            }
-
-            count += cells[i][j];
-        }
-    }
-
-    return count
-}
-
 function isAlive(cell, numNeighbours) {
     switch (cell) {
         case 1:
@@ -70,71 +38,73 @@ function isAlive(cell, numNeighbours) {
     }
 }
 
-function nextState(cells) {
-    let newCells = initCells(cells.length, cells[0].length);
+function nextState(grid) {
+    let newGrid = new Grid();
 
-    cells.forEach((row, x) => {
-        row.forEach((cell, y) => {
-            let numNeighbours = countNeighbours(cells, x, y);
-            newCells[x][y] = isAlive(cell, numNeighbours);
-        });
-    });
+    let {minX,minY,maxX,maxY} = grid.getBounds()
+    for (let x = minX; x <= maxX; x++) {
+        for (let y = minY; y <= maxY; y++) {
+            let numNeighbours = grid.countNeighbours(x, y);
 
-    return newCells;
+            if (isAlive(grid.isPointAlive(x, y), numNeighbours)) {
+                newGrid.addPoint(x, y);
+            }
+        }
+    }
+
+    return newGrid;
 }
 
-function draw(cells, canvas) {
+function draw(grid, canvas) {
     /*
     cells: an array of arrays, with truthy values being alive and falsey values
     being dead.
     canvas: a 2d canvas object
     */
     canvas.clearRect(0, 0, cellSize * cellsVert, cellSize * cellsHoriz);
-    cells.forEach((row, x) => {
-        row.forEach((cell, y) => {
+
+
+    let {minX,minY,maxX,maxY} = grid.getBounds()
+    for (let i = minX; i <= maxX; i++) {
+        for (let j = minY; j <= maxY; j++) {
             canvas.beginPath();
-            canvas.rect(y * cellSize, x * cellSize, cellSize, cellSize);
-            if (cell) {
+            canvas.rect(j * cellSize, i * cellSize, cellSize, cellSize);
+            if (grid.isPointAlive(i, j)) {
                 canvas.fill();
             } else {
                 canvas.stroke();
             }
-        });
-    });
+        }
+    }
 }
 
 function run() {
-    let cells = initCells(20, 20),
+    let grid = new Grid(),
         canvas = initCanvas();
 
     // GLIDER
-    cells[0][1] = 1;
-    cells[1][2] = 1;
-    cells[2][0] = 1;
-    cells[2][1] = 1;
-    cells[2][2] = 1;
+    grid.addPoint(0, 1);
+    grid.addPoint(1, 2);
+    grid.addPoint(2, 0);
+    grid.addPoint(2, 1);
+    grid.addPoint(2, 2);
 
-    // GLIDER 2
-    cells[0][8] = 1;
-    cells[1][9] = 1;
-    cells[2][7] = 1;
-    cells[2][8] = 1;
-    cells[2][9] = 1;
+    // // GLIDER 2
+    // grid.addPoint(0, 8);
+    // grid.addPoint(1, 9);
+    // grid.addPoint(2, 7);
+    // grid.addPoint(2, 8);
+    // grid.addPoint(2, 9);
 
-
-    // Blinker
-    cells[15][6] = 1;
-    cells[15][7] = 1;
-    cells[15][8] = 1;
+    // // Blinker
+    // grid.addPoint(1, 6);
+    // grid.addPoint(1, 7);
+    // grid.addPoint(1, 8);
 
     setInterval(function () {
-        cells = nextState(cells);
-        draw(cells, canvas)
+        grid = nextState(grid);
+        draw(grid, canvas)
     }, 200);
 }
 
 window.run = run;
-
-module.exports = {
-    initCells: initCells
-};
