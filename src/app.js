@@ -1,13 +1,9 @@
-const PI = 3.141593;  // POINTS: 1, 2
-
-
-const cellSize = 15,
+const cellSize = 15, // POINTS: 1, 2
       cellsHoriz = 60,
       cellsVert = 30
 
 
-
-function initCanvas() {
+export function initCanvas() { // POINTS: 33, 34
     let canvasEl = document.getElementById('canvas'),
         canvas = canvasEl.getContext('2d');
 
@@ -20,8 +16,8 @@ function initCanvas() {
     return canvas
 }
 
-function makeCells(width=3, height=3) { // POINTS: 10, 11
-    let newCells = [];
+export function makeCells(width=3, height=3) { // POINTS: 10, 11
+    let newCells = []; // POINTS: 3, 4
 
     for (let x = 0; x < width; x++) {
         newCells.push(Array(height).fill(0));
@@ -30,7 +26,7 @@ function makeCells(width=3, height=3) { // POINTS: 10, 11
     return newCells;
 }
 
-function draw(cells, canvas) {
+export function draw(cells, canvas) {
     /*
     cells: an array of arrays, with truthy values being alive and falsey values
     being dead.
@@ -50,7 +46,7 @@ function draw(cells, canvas) {
     });
 }
 
-function countNeighbours(cells, x, y) {
+export function countNeighbours(cells, x, y) {
     let count = 0;
 
     for (let dx=-1; dx <= 1; dx++) {
@@ -70,7 +66,7 @@ function countNeighbours(cells, x, y) {
 }
 
 
-function isAlive(cell, numNeighbours) {
+export function isAlive(cell, numNeighbours) {
     if (cell === 1) {
         if (numNeighbours < 2 || numNeighbours > 3) {
             return 0;
@@ -89,21 +85,27 @@ function isAlive(cell, numNeighbours) {
 }
 
 
-function nextState(cells) {
-    let newCells = makeCells(cells.length, cells[0].length);
+export function nextState(cells) {
+    let newCells = makeCells(cells.length, cells[0].length),
+        totalNeighbours = 0;
 
     cells.forEach((row, x) => { // POINTS!
         row.forEach((cell, y) => {
             let numNeighbours = countNeighbours(cells, x, y);
+            totalNeighbours += numNeighbours;
+
             newCells[x][y] = isAlive(cell, numNeighbours);
         });
     });
+
+    // POINTS: 14, 15
+    console.log(`Currently there are ${totalNeighbours} neighbours!`);
 
     return newCells;
 }
 
 
-function run() {
+export function run() {
     let cells = makeCells(25, 25), // POINTS!
         canvas = initCanvas();
 
@@ -114,18 +116,22 @@ function run() {
     cells[2][1] = 1;
     cells[2][2] = 1;
 
-    function drawer() { // POINTS!
+    // BONUS: Blinker
+    cells[10][10] = 1;
+    cells[10][11] = 1;
+    cells[10][12] = 1;
+
+    function drawer() { // POINTS: 3, 5
         cells = nextState(cells);
 
         draw(cells, canvas);
     }
 
     // drawer()
-    setInterval(drawer, 1000);
+    setInterval(drawer, 200);
 }
 
 window.run = run;
 
-module.exports = {
-    makeCells: makeCells
-};
+// POINTS: 23, 24
+module.exports = {cellSize, cellsHoriz, cellsVert};
