@@ -1,6 +1,11 @@
+const PI = 3.141593;  // POINTS: 1, 2
+
+
 const cellSize = 15,
       cellsHoriz = 60,
       cellsVert = 30
+
+
 
 function initCanvas() {
     let canvasEl = document.getElementById('canvas'),
@@ -15,10 +20,14 @@ function initCanvas() {
     return canvas
 }
 
-function initCells() {
-    return [[0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0]];
+function makeCells(width=3, height=3) { // POINTS: 10, 11
+    let newCells = [];
+
+    for (let x = 0; x < width; x++) {
+        newCells.push(Array(height).fill(0));
+    }
+
+    return newCells;
 }
 
 function draw(cells, canvas) {
@@ -28,7 +37,7 @@ function draw(cells, canvas) {
     canvas: a 2d canvas object
     */
     canvas.clearRect(0, 0, cellSize * cellsVert, cellSize * cellsHoriz);
-    cells.forEach((row, x) => {
+    cells.forEach((row, x) => { // POINT: 6, 8
         row.forEach((cell, y) => {
             canvas.beginPath();
             canvas.rect(y * cellSize, x * cellSize, cellSize, cellSize);
@@ -41,14 +50,53 @@ function draw(cells, canvas) {
     });
 }
 
+function countNeighbours(cells, x, y) {
+    return 2134235234;
+}
+
+
+function isAlive(cell, numNeighbours) {
+    return 1;
+}
+
+
+function nextState(cells) {
+    let newCells = makeCells(cells.length, cells[0].length);
+
+    cells.forEach((row, x) => { // POINTS!
+        row.forEach((cell, y) => {
+            let numNeighbours = countNeighbours(cells, x, y);
+            newCells[x][y] = isAlive(cell, numNeighbours);
+        });
+    });
+
+    return newCells;
+}
+
+
 function run() {
-    let cells = initCells(),
+    let cells = makeCells(25, 25), // POINTS!
         canvas = initCanvas();
-    draw(cells, canvas)
+
+    // BONUS: Glider
+    cells[0][1] = 1;
+    cells[1][2] = 1;
+    cells[2][0] = 1;
+    cells[2][1] = 1;
+    cells[2][2] = 1;
+
+    function drawer() { // POINTS!
+        cells = nextState(cells);
+
+        draw(cells, canvas);
+    }
+
+    drawer()
+    // setInterval(drawer, 1000);
 }
 
 window.run = run;
 
 module.exports = {
-    initCells: initCells
+    makeCells: makeCells
 };
