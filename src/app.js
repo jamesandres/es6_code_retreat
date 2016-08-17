@@ -1,8 +1,8 @@
 const cellSize = 15;
 const cellsHoriz = 60;
 const cellsVert = 30;
-const numRows = 100;
-const numCols = 100;
+const numRows = 27;
+const numCols = 27;
 
 function initCanvas() {
     let canvasEl = document.getElementById('canvas'),
@@ -20,11 +20,6 @@ function initCanvas() {
 function makeCells() {
     return Array(numRows).fill(Array(numCols).fill(0));
 }
-
-
-var cells = makeCells();
-var canvas = initCanvas();
-cells[5][5] = 1; // LAME.
 
 
 function draw(cells, canvas) {
@@ -54,7 +49,7 @@ function findNeighbours(x, y) {
 };
 
 
-function step() {
+function step(cells, canvas) {
     let newCells = makeCells();
 
     cells.forEach((row, x) => {
@@ -76,7 +71,11 @@ function step() {
 
 
 function run() {
-    setInterval(step, 1000);
+    let cells = makeCells();
+    let canvas = initCanvas();
+    cells[5][5] = 1; // LAME.
+
+    setInterval(function () {step(cells, canvas)}, 1000);
 }
 
 window.run = run;
