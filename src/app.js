@@ -1,17 +1,24 @@
-var canvasEl = document.getElementById('canvas'),
-    canvas = canvasEl.getContext('2d'),
-    cellSize = 15,
+var cellSize = 15,
     cellsHoriz = 60,
     cellsVert = 30;
 
-canvasEl.width = cellSize * cellsHoriz;
-canvasEl.height = cellSize * cellsVert;
-
-canvas.strokeStyle = '#e1e1e1';
-canvas.fillStyle = 'cadetblue';
 
 
-function populateCells(cells) {
+function initCanvas() {
+    var canvasEl = document.getElementById('canvas'),
+        canvas = canvasEl.getContext('2d');
+
+    canvasEl.width = cellSize * cellsHoriz;
+    canvasEl.height = cellSize * cellsVert;
+
+    canvas.strokeStyle = '#e1e1e1';
+    canvas.fillStyle = 'cadetblue';
+
+    return canvas
+}
+
+
+function initCells(cells) {
     var cells = []
     for (var i=0; i<cellsHoriz; i++) {
         cells[i] = [];
@@ -24,7 +31,7 @@ function populateCells(cells) {
 }
 
 
-function draw(cells) {
+function draw(cells, canvas) {
     canvas.clearRect(0, 0, cellSize * cellsVert, cellSize * cellsHoriz);
     cells.forEach(function(row, x) {
         row.forEach(function(cell, y) {
@@ -40,4 +47,10 @@ function draw(cells) {
 
 }
 
-draw(populateCells())
+function run() {
+    var cells = initCells(),
+        canvas = initCanvas();
+    draw(cells, canvas)
+}
+
+window.run = run;
