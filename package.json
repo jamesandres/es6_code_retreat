@@ -15,7 +15,7 @@
   "scripts": {
     "test": "jest",
     "build": "webpack",
-    "server": "webpack-dev-server --content-base dist/",
+    "server": "webpack-dev-server --content-base dist/ --host 0.0.0.0",
     "watch": "webpack --watch",
     "test-watch": "jest --watch"
   },
