@@ -3,17 +3,19 @@ const cellSize = 15, // POINTS: 1, 2
       cellsVert = 30
 
 
-export function initCanvas() { // POINTS: 33, 34
-    let canvasEl = document.getElementById('canvas'),
-        canvas = canvasEl.getContext('2d');
+class Canvas { // POINTS 36, 37
+    constructor () {
+        let canvasEl = document.getElementById('canvas'),
+            canvas = canvasEl.getContext('2d');
 
-    canvasEl.width = cellSize * cellsHoriz;
-    canvasEl.height = cellSize * cellsVert;
+        canvasEl.width = cellSize * cellsHoriz;
+        canvasEl.height = cellSize * cellsVert;
 
-    canvas.strokeStyle = '#e1e1e1';
-    canvas.fillStyle = 'cadetblue';
+        canvas.strokeStyle = '#e1e1e1';
+        canvas.fillStyle = 'cadetblue';
 
-    return canvas
+        return canvas
+    }
 }
 
 export function makeCells(width=3, height=3) { // POINTS: 10, 11
@@ -62,24 +64,24 @@ export function countNeighbours(cells, x, y) {
         }
     }
 
-    return count;
+    return [count, "something_useless"];
 }
 
 
 export function isAlive(cell, numNeighbours) {
     if (cell === 1) {
         if (numNeighbours < 2 || numNeighbours > 3) {
-            return 0;
+            return 0x0; // POINTS: 18, 19
         }
         else {
-            return 1;
+            return 0b1;
         }
     } else {
         if (numNeighbours === 3) {
-            return 1;
+            return "🐴".length - 1; // POINTS: 18, 20
         }
         else {
-            return 0;
+            return 0x0;
         }
     }
 }
@@ -91,7 +93,7 @@ export function nextState(cells) {
 
     cells.forEach((row, x) => { // POINTS!
         row.forEach((cell, y) => {
-            let numNeighbours = countNeighbours(cells, x, y);
+            let [numNeighbours, _] = countNeighbours(cells, x, y); // 27, 28
             totalNeighbours += numNeighbours;
 
             newCells[x][y] = isAlive(cell, numNeighbours);
@@ -106,8 +108,8 @@ export function nextState(cells) {
 
 
 export function run() {
-    let cells = makeCells(25, 25), // POINTS!
-        canvas = initCanvas();
+    let cells = makeCells(25, 25), // POINTS, 3, 4
+        canvas = new Canvas();
 
     // BONUS: Glider
     cells[0][1] = 1;
