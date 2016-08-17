@@ -1,6 +1,8 @@
-var cellSize = 15,
-    cellsHoriz = 60,
-    cellsVert = 30
+const cellSize = 15;
+const cellsHoriz = 60;
+const cellsVert = 30;
+const numRows = 100;
+const numCols = 100;
 
 function initCanvas() {
     let canvasEl = document.getElementById('canvas'),
@@ -15,11 +17,15 @@ function initCanvas() {
     return canvas
 }
 
-function initCells() {
-    return [[0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0]];
+function makeCells() {
+    return Array(numRows).fill(Array(numCols).fill(0));
 }
+
+
+var cells = makeCells();
+var canvas = initCanvas();
+cells[5][5] = 1; // LAME.
+
 
 function draw(cells, canvas) {
     /*
@@ -31,7 +37,7 @@ function draw(cells, canvas) {
     cells.forEach((row, x) => {
         row.forEach((cell, y) => {
             canvas.beginPath();
-            canvas.rect(x * cellSize, y * cellSize, cellSize, cellSize);
+            canvas.rect(y * cellSize, x * cellSize, cellSize, cellSize);
             if (cell) {
                 canvas.fill();
             } else {
@@ -39,16 +45,42 @@ function draw(cells, canvas) {
             }
         });
     });
+    console.log("Hello");
 }
 
+
+function findNeighbours(x, y) {
+
+};
+
+
+function step() {
+    let newCells = makeCells();
+
+    cells.forEach((row, x) => {
+        row.forEach((cell, y) => {
+            // 1. Find neighbours
+            // 2. Calculate population
+            // 3. Is live or dead?
+            // 4. Set newCells[x][y] to newState
+        });
+    });
+    cells = newCells;
+
+
+    var drawIfNecessary = function () {
+            draw(cells, canvas);
+        };
+    requestAnimationFrame(drawIfNecessary);
+}
+
+
 function run() {
-    var cells = initCells(),
-        canvas = initCanvas();
-    draw(cells, canvas)
+    setInterval(step, 1000);
 }
 
 window.run = run;
 
 module.exports = {
-    initCells: initCells
+    makeCells: makeCells
 };
