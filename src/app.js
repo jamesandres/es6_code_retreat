@@ -1,6 +1,6 @@
-var cellSize = 15,
-    cellsHoriz = 60,
-    cellsVert = 30
+const cellSize = 15,
+      cellsHoriz = 60,
+      cellsVert = 30
 
 function initCanvas() {
     let canvasEl = document.getElementById('canvas'),
@@ -31,7 +31,7 @@ function draw(cells, canvas) {
     cells.forEach((row, x) => {
         row.forEach((cell, y) => {
             canvas.beginPath();
-            canvas.rect(x * cellSize, y * cellSize, cellSize, cellSize);
+            canvas.rect(y * cellSize, x * cellSize, cellSize, cellSize);
             if (cell) {
                 canvas.fill();
             } else {
@@ -42,7 +42,7 @@ function draw(cells, canvas) {
 }
 
 function run() {
-    var cells = initCells(),
+    let cells = initCells(),
         canvas = initCanvas();
     draw(cells, canvas)
 }
