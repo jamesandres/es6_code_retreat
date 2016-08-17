@@ -18,7 +18,7 @@ function initCanvas() {
 }
 
 
-function initCells(cells) {
+function initCells() {
     var cells = []
     for (var i=0; i<cellsHoriz; i++) {
         cells[i] = [];
@@ -54,3 +54,7 @@ function run() {
 }
 
 window.run = run;
+
+module.exports = {
+    initCells: initCells
+};
