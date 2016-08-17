@@ -1,11 +1,9 @@
 var cellSize = 15,
     cellsHoriz = 60,
-    cellsVert = 30;
-
-
+    cellsVert = 30
 
 function initCanvas() {
-    var canvasEl = document.getElementById('canvas'),
+    let canvasEl = document.getElementById('canvas'),
         canvas = canvasEl.getContext('2d');
 
     canvasEl.width = cellSize * cellsHoriz;
@@ -17,26 +15,23 @@ function initCanvas() {
     return canvas
 }
 
-
 function initCells() {
-    var cells = []
-    for (var i=0; i<cellsHoriz; i++) {
-        cells[i] = [];
-        for (var j=0; j<cellsVert; j++) {
-            cells[i][j] = 0;
-        }
-    }
-    cells[2][3] = 1
-    return cells
+    return [[0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]];
 }
 
-
 function draw(cells, canvas) {
+    /*
+    cells: an array of arrays, with truthy values being alive and falsey values
+    being dead.
+    canvas: a 2d canvas object
+    */
     canvas.clearRect(0, 0, cellSize * cellsVert, cellSize * cellsHoriz);
-    cells.forEach(function(row, x) {
-        row.forEach(function(cell, y) {
+    cells.forEach((row, x) => {
+        row.forEach((cell, y) => {
             canvas.beginPath();
-            canvas.rect(x*cellSize, y*cellSize, cellSize, cellSize);
+            canvas.rect(x * cellSize, y * cellSize, cellSize, cellSize);
             if (cell) {
                 canvas.fill();
             } else {
@@ -44,7 +39,6 @@ function draw(cells, canvas) {
             }
         });
     });
-
 }
 
 function run() {
