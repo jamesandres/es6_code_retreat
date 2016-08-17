@@ -15,10 +15,72 @@ function initCanvas() {
     return canvas
 }
 
-function initCells() {
-    return [[0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0]];
+function initCells(w, h) {
+    let cells= [[0, 0, 0],
+                [0, 1, 0],
+                [0, 0, 0]];
+    let newCells = [];
+    for (let x = 0; x < w; x++) {
+        newCells[x] = [];
+        for (let y = 0; y < h; y++) {
+            newCells[x][y] = 0;
+        }
+    }
+
+    return newCells;
+}
+
+function countNeighbours(cells, x, y) {
+    let count = 0;
+
+    for (let dx=-1; dx <= 1; dx++) {
+        for (let dy=-1; dy <= 1; dy++) {
+            let i = (x + dx + cells.length) % cells.length,
+                j = (y + dy + cells[0].length) % cells[0].length;
+
+            if (i === x && j === y) {
+                continue;
+            }
+
+            count += cells[i][j];
+        }
+    }
+
+    return count
+}
+
+function isAlive(cell, numNeighbours) {
+    switch (cell) {
+        case 1:
+            if (numNeighbours < 2 || numNeighbours > 3) {
+                return 0
+            }
+            else {
+                return 1;
+            }
+        case 0:
+            if (numNeighbours === 3) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        default:
+            return 0;
+    }
+}
+
+function nextState(cells) {
+    let newCells = initCells(cells.length, cells[0].length);
+
+    cells.forEach((row, x) => {
+        row.forEach((cell, y) => {
+            let numNeighbours = countNeighbours(cells, x, y);
+            newCells[x][y] = isAlive(cell, numNeighbours);
+        });
+    });
+
+    return newCells;
 }
 
 function draw(cells, canvas) {
@@ -42,9 +104,19 @@ function draw(cells, canvas) {
 }
 
 function run() {
-    let cells = initCells(),
+    let cells = initCells(20, 20),
         canvas = initCanvas();
-    draw(cells, canvas)
+
+    cells[0][1] = 1;
+    cells[1][2] = 1;
+    cells[2][0] = 1;
+    cells[2][1] = 1;
+    cells[2][2] = 1;
+
+    setInterval(function () {
+        cells = nextState(cells);
+        draw(cells, canvas)
+    }, 200);
 }
 
 window.run = run;
