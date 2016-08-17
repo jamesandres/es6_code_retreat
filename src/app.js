@@ -1,3 +1,5 @@
+import Grid from './grid';
+
 const cellSize = 15,
       cellsHoriz = 60,
       cellsVert = 30
@@ -16,10 +18,8 @@ function initCanvas() {
 }
 
 function initCells(w, h) {
-    let cells= [[0, 0, 0],
-                [0, 1, 0],
-                [0, 0, 0]];
     let newCells = [];
+
     for (let x = 0; x < w; x++) {
         newCells[x] = [];
         for (let y = 0; y < h; y++) {
@@ -107,11 +107,25 @@ function run() {
     let cells = initCells(20, 20),
         canvas = initCanvas();
 
+    // GLIDER
     cells[0][1] = 1;
     cells[1][2] = 1;
     cells[2][0] = 1;
     cells[2][1] = 1;
     cells[2][2] = 1;
+
+    // GLIDER 2
+    cells[0][8] = 1;
+    cells[1][9] = 1;
+    cells[2][7] = 1;
+    cells[2][8] = 1;
+    cells[2][9] = 1;
+
+
+    // Blinker
+    cells[15][6] = 1;
+    cells[15][7] = 1;
+    cells[15][8] = 1;
 
     setInterval(function () {
         cells = nextState(cells);
