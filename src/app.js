@@ -51,12 +51,41 @@ function draw(cells, canvas) {
 }
 
 function countNeighbours(cells, x, y) {
-    return 2134235234;
+    let count = 0;
+
+    for (let dx=-1; dx <= 1; dx++) {
+        for (let dy=-1; dy <= 1; dy++) {
+            let i = (x + dx + cells.length) % cells.length,
+                j = (y + dy + cells[0].length) % cells[0].length;
+
+            if (i===x && j==y) {
+                continue;
+            }
+
+            count += cells[i][j];
+        }
+    }
+
+    return count;
 }
 
 
 function isAlive(cell, numNeighbours) {
-    return 1;
+    if (cell === 1) {
+        if (numNeighbours < 2 || numNeighbours > 3) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    } else {
+        if (numNeighbours === 3) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
 }
 
 
@@ -91,8 +120,8 @@ function run() {
         draw(cells, canvas);
     }
 
-    drawer()
-    // setInterval(drawer, 1000);
+    // drawer()
+    setInterval(drawer, 1000);
 }
 
 window.run = run;
