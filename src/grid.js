@@ -12,8 +12,8 @@ class Grid {
 
     getBounds() {
         // return({minX: 0, minY: 0, maxX: 10, maxY: 10});
-        let minX = 0;
-        let minY = 0;
+        let minX = Number.MAX_VALUE;
+        let minY = Number.MAX_VALUE;
         let maxX = 0;
         let maxY = 0;
         this.getPoints().forEach(([x, y]) => {
